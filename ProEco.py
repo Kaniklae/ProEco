@@ -8,6 +8,7 @@ import plotly.graph_objects as go
 import plotly.figure_factory as ff # type: ignore
 import plotly.subplots as sp
 import re
+import requests
 
 
 st.title ("Energy Consumption and Production in France")
@@ -20,6 +21,12 @@ if page==pages[0]:
     st.subheader("Exploration")
     st.write("## Data Presentation")
     text = "The data is from the French government and contains information about the energy consumption in France from 2000 to 2020"
+
+    url = f"https://drive.google.com/uc?export=download&id=1fmlXxTP-wvczjYUkjCKKXM5tmSG6ft-r"
+    reponse = requests.get(url)
+    with open ("eco.csv", "wb") as f:
+        f.write(response.content)
+
     df = pd.read_csv("eco.csv", sep=";")
     st.dataframe(df.head(10))
     st.write(df.shape)
