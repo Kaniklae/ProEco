@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 import streamlit as st 
-import requests
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
 
 
 st.title ("Energy Consumption and Production in France")
@@ -14,13 +15,15 @@ if page==pages[0]:
     st.subheader("Exploration")
     st.write("## Data Presentation")
     text = "The data is from the French government and contains information about the energy consumption in France from 2000 to 2020"
-
-    url = f"https://drive.google.com/uc?export=download&id=1fmlXxTP-wvczjYUkjCKKXM5tmSG6ft-r"
-    response = requests.get(url)
-    with open ("eco.csv", "wb") as f:
-        f.write(response.content)
-
+    gauth = GoogleAuth()
+    gauth.LocalWebserverAuth()  # Creates a local webserver and automatically handles authentication.
+    drive = GoogleDrive(gauth)
+    file_id = "1fmlXxTP-wvczjYUkjCKKXM5tmSG6ft-r"
+    file = drive.CreateFile({'id': file_id})
+    file.GetContentFile("eco.csv")  # Download the file as a CSV
     df = pd.read_csv("eco.csv", sep=";")
+
+   
     st.dataframe(df.head(10))
     st.write(df.shape)
     st.dataframe(df.describe())
