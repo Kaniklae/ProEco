@@ -1,13 +1,6 @@
 import pandas as pd
 import numpy as np
 import streamlit as st 
-import matplotlib.pyplot as plt
-import seaborn as sns
-import plotly.express as px # type: ignore
-import plotly.graph_objects as go
-import plotly.figure_factory as ff # type: ignore
-import plotly.subplots as sp
-import re
 import requests
 
 
