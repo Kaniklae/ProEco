@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
 import streamlit as st 
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
+from google.oauth2 import ervice_account
+from googleapiclient.discovery import build
+import io
+import requests
 
 
 st.title ("Energy Consumption and Production in France")
@@ -15,13 +17,29 @@ if page==pages[0]:
     st.subheader("Exploration")
     st.write("## Data Presentation")
     text = "The data is from the French government and contains information about the energy consumption in France from 2000 to 2020"
-    gauth = GoogleAuth()
-    gauth.LocalWebserverAuth()  # Creates a local webserver and automatically handles authentication.
-    drive = GoogleDrive(gauth)
-    file_id = "1fmlXxTP-wvczjYUkjCKKXM5tmSG6ft-r"
-    file = drive.CreateFile({'id': file_id})
-    file.GetContentFile("eco.csv")  # Download the file as a CSV
-    df = pd.read_csv("eco.csv", sep=";")
+    SERVICE_ACCOUNT_FILE = "service_account.json"
+
+    SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
+
+    credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes = SCOPES)
+    drive_service = build ("drive", "v3", credentials = credentials)
+    FILE_ID = "1fmlXxTP-wvczjYUkjCKKXM5tmSG6ft-r"
+    def download_file(file_id):
+        request = drive_service.files().get_media(fileId = file_id)
+        fh = io.BytesIO()(fh, request)
+        
+        downloader = googleapiclient.hhtp.MediaIoBaseDownload
+        done = False
+        while not done:
+            status, done = downloader.newt_chunk()
+            st.write(f"Download {int(status.progress()*100)}%."
+        fh.seek(0)
+        return fh
+
+    buffer = download_file(FILE_ID)
+
+    
+    df = pd.read_csv(buffer)
 
    
     st.dataframe(df.head(10))
