@@ -16,7 +16,7 @@ if page==pages[0]:
     text = "The data is from the French government and contains information about the energy consumption in France from 2000 to 2020"
 
     url = f"https://drive.google.com/uc?export=download&id=1fmlXxTP-wvczjYUkjCKKXM5tmSG6ft-r"
-    reponse = requests.get(url)
+    response = requests.get(url)
     with open ("eco.csv", "wb") as f:
         f.write(response.content)
 
